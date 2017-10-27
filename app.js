@@ -8,8 +8,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var g = require('ger');
-var esm = new g.MemESM();
-var ger = new g.GER(esm);
+var esm = new g.MemESM(); // Create a new event manager
+var ger = new g.GER(esm); // Initialize ger with the event manager
 
 /////////////////////////////////////////////////////
 
@@ -60,10 +60,10 @@ app.post('/add_events', function(req, res){
 })
 
 
-app.get('/events', function(req, res){
+app.get('/events/:namespace', function(req, res){
     res.setHeader('Content-Type', 'application/json');
 
-    ger.find_events('movies')
+    ger.find_events(req.params.namespace)
         .then((events)=>{
             res.send(JSON.stringify({ events: events }));
         })
@@ -102,7 +102,7 @@ app.post('/thing_neighbourhood', function(req, res){
     res.setHeader('Content-Type','application/json');
     body = req.body;
 
-    ger.thing_neighbourhood(body.namespace, body.thing, body.actions, options = {})
+    ger.thing_neighbourhood(body.namespace, body.thing, body.actions)
         .then((response)=>{
             res.send(JSON.stringify({neighbourhood: response}));
         })
